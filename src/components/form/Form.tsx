@@ -4,30 +4,52 @@ import '../../styles/index.css'
 import {FormErrors, FormType} from "../../types";
 import FormBreadcrumb from "./FormBreadcrumb";
 import {isValid} from "./validation/validateForm";
+import formApi from '../../apis/formApi'
 
 const Form = () => {
   const [formOpen, setFormOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
-  const [form, setForm] = useState<FormType>({
-    field1: '',
-    field2: null,
-    field3: '',
-    field4: '',
-    field5: '',
-    field6: ''
-  })
-  const [errors, setErrors] = useState<FormErrors>({
-    field1: '',
-    field2: '',
-    field3: '',
-    field4: '',
-    field5: '',
-    field6: ''
-  })
+  const [form, setForm] = useState<FormType>(new FormType())
+  const [errors, setErrors] = useState<FormErrors>(new FormErrors())
 
   useEffect(() => {
-    // fetch data
+    if (formOpen) {
+      fetchFormData()
+    }
   }, [formOpen])
+
+  const fetchFormData = async () => {
+    const response = await formApi.get("/", {})
+    setForm((response && response.status === 200 && response.data) || new FormType())
+  }
+
+  const onNext = () => {
+    if (isValid(form, currentPage, setErrors) && currentPage < 3) {
+      setCurrentPage(currentPage+1)
+    }
+  }
+
+  const onPrev = () => {
+    if (isValid(form, currentPage, setErrors) && currentPage > 1) {
+      setCurrentPage(currentPage-1)
+    }
+  }
+
+  const onDismiss = () => {
+    setCurrentPage(1)
+    setFormOpen(false)
+  }
+
+  const onSubmit = async () => {
+    if (isValid(form, currentPage, setErrors)) {
+      const response = await formApi.post('/', form)
+      if (response && response.status === 200) {
+        window.alert("Form posted successfully.")
+      } else {
+        window.alert("Form couldn't be posted.")
+      }
+    }
+  }
 
   const renderContent = (): React.ReactFragment => {
     return (
@@ -154,29 +176,6 @@ const Form = () => {
         </div>
       </div>
     )
-  }
-
-  const onNext = () => {
-    if (isValid(form, currentPage, setErrors) && currentPage < 3) {
-      setCurrentPage(currentPage+1)
-    }
-  }
-
-  const onPrev = () => {
-    if (isValid(form, currentPage, setErrors) && currentPage > 1) {
-      setCurrentPage(currentPage-1)
-    }
-  }
-
-  const onDismiss = () => {
-    setCurrentPage(1)
-    setFormOpen(false)
-  }
-
-  const onSubmit = () => {
-    if (isValid(form, currentPage, setErrors)) {
-      // post data
-    }
   }
 
   return (

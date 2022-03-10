@@ -1,6 +1,6 @@
 import {FormErrors, FormType} from "../../../types";
 
-export const isValid = (form: FormType, currentPage: number, setErrors: any) => {
+export const isValid = (form: FormType, currentPage: number, setErrors: (errors: FormErrors) => void) => {
   let isValid = true
   let errorList: FormErrors = {}
 

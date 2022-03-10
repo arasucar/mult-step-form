@@ -5,6 +5,9 @@ import {FormErrors, FormType} from "../../types";
 import FormBreadcrumb from "./FormBreadcrumb";
 import {isValid} from "./validation/validateForm";
 import formApi from '../../apis/formApi'
+import FormPageThree from "./FormPageThree";
+import FormPageTwo from "./FormPageTwo";
+import FormPageOne from "./FormPageOne";
 
 const Form = () => {
   const [formOpen, setFormOpen] = useState(false)
@@ -41,10 +44,11 @@ const Form = () => {
   }
 
   const onSubmit = async () => {
-    if (isValid(form, currentPage, setErrors)) {
+    if (isValid(form, currentPage, setErrors) && currentPage === 3) {
       const response = await formApi.post('/', form)
       if (response && response.status === 200) {
         window.alert("Form posted successfully.")
+        onDismiss()
       } else {
         window.alert("Form couldn't be posted.")
       }
@@ -57,106 +61,25 @@ const Form = () => {
         <FormBreadcrumb currentPage={currentPage} numberOfPages={3} setCurrentPage={setCurrentPage} isValid={() => isValid(form, currentPage, setErrors)}/>
         <form>
           {currentPage === 1 &&
-            <div className="form-page">
-              <div className="form-group">
-                <label htmlFor="field1" className="form-label">Field 1</label>
-                <input
-                  id="field1"
-                  name="field1"
-                  type="email"
-                  placeholder="Please enter field 1"
-                  className="form-input"
-                  value={form.field1}
-                  onChange={(e) => setForm({...form, field1: e.target.value})}
-                  autoComplete="off"
-                />
-                <div className="error">{errors.field1}</div>
-              </div>
-              <div className="form-group">
-                <label htmlFor="field2" className="form-label">Field 2</label>
-                <input
-                  id="field2"
-                  name="field2"
-                  type="number"
-                  placeholder="Please enter field 2"
-                  className="form-input"
-                  value={form.field2 || ''}
-                  onKeyPress={(event) => {
-                    if (!/^\d*\.?\d*$/.test(event.key)) {
-                      event.preventDefault();
-                    }
-                  }}
-                  onChange={(e) => setForm({...form, field2: parseFloat(e.target.value)})}
-                  autoComplete="off"
-                />
-                <div className="error">{errors.field2}</div>
-              </div>
-            </div>
+            <FormPageOne
+              form={form}
+              errors={errors}
+              setForm={setForm}
+            />
           }
           {currentPage === 2 &&
-            <div className="form-page">
-              <div className="form-group">
-                <label htmlFor="field3" className="form-label">Field 3</label>
-                <input
-                  id="field3"
-                  name="field3"
-                  type="text"
-                  placeholder="Please enter field 3"
-                  maxLength={20}
-                  className="form-input"
-                  value={form.field3}
-                  onChange={(e) => setForm({...form, field3: e.target.value})}
-                  autoComplete="off"
-                />
-                <div className="error">{errors.field3}</div>
-              </div>
-              <div className="form-group">
-                <label htmlFor="field4" className="form-label">Field 4</label>
-                <input
-                  id="field4"
-                  name="field4"
-                  type="text"
-                  placeholder="Please enter field 4"
-                  className="form-input"
-                  value={form.field4}
-                  onChange={(e) => setForm({...form, field4: e.target.value})}
-                  autoComplete="off"
-                />
-                <div className="error">{errors.field4}</div>
-              </div>
-            </div>
+            <FormPageTwo
+              form={form}
+              errors={errors}
+              setForm={setForm}
+            />
           }
           {currentPage === 3 &&
-            <div className="form-page">
-              <div className="form-group">
-                <label htmlFor="field5" className="form-label">Field 5</label>
-                <input
-                  id="field5"
-                  name="field5"
-                  type="text"
-                  placeholder="Please enter field 5"
-                  className="form-input"
-                  value={form.field5}
-                  onChange={(e) => setForm({...form, field5: e.target.value})}
-                  autoComplete="off"
-                />
-                <div className="error">{errors.field5}</div>
-              </div>
-              <div className="form-group">
-                <label htmlFor="field6" className="form-label">Field 6</label>
-                <input
-                  id="field6"
-                  name="field6"
-                  type="text"
-                  placeholder="Please enter field 6"
-                  className="form-input"
-                  value={form.field6}
-                  onChange={(e) => setForm({...form, field6: e.target.value})}
-                  autoComplete="off"
-                />
-                <div className="error">{errors.field6}</div>
-              </div>
-            </div>
+            <FormPageThree
+              form={form}
+              errors={errors}
+              setForm={setForm}
+            />
           }
         </form>
       </div>

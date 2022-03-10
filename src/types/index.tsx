@@ -7,45 +7,32 @@ export type ModalProps = {
 }
 
 export class FormType {
-  field1?: string;
-  field2?: number | null;
-  field3?: string;
-  field4?: string;
-  field5?: string;
-  field6?: string;
-
-  constructor() {
-    this.field1 = '';
-    this.field2 = null;
-    this.field3 = '';
-    this.field4 = '';
-    this.field5 = '';
-    this.field6 = '';
-  }
+  field1?: string = '';
+  field2?: number | null = null;
+  field3?: string = '';
+  field4?: string = '';
+  field5?: string = '';
+  field6?: string = '';
 }
 
 export class FormErrors {
-  field1?: string;
-  field2?: string;
-  field3?: string;
-  field4?: string;
-  field5?: string;
-  field6?: string;
-
-  constructor() {
-    this.field1 = '';
-    this.field2 = '';
-    this.field3 = '';
-    this.field4 = '';
-    this.field5 = '';
-    this.field6 = '';
-  }
+  field1?: string = '';
+  field2?: string = '';
+  field3?: string = '';
+  field4?: string = '';
+  field5?: string = '';
+  field6?: string = '';
 }
 
 export type FormBreadcrumbProps = {
   currentPage?: number,
   numberOfPages?: number,
-  setCurrentPage?: any,
-  isValid?: any
+  setCurrentPage: (page: number) => void,
+  isValid: () => boolean
 }
 
+export type FormPageProps = {
+  form: FormType,
+  errors: FormErrors,
+  setForm: (form: FormType) => void
+}
